@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>動画視聴サイト</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background-color: #f4f4f4; 
+            margin: 0; 
+        }
+
+        header {
+            background-color: #008DBD;
+            color: white;
+            padding: 20px 30px;
+            text-align: left;
+            font-size: 24px;
+            font-weight: normal;
+        }
+
+        #video-container { margin-top: 50px; }
+        video { 
+            width: 80%; 
+            max-width: 800px; 
+            border: 2px solid #333; 
+        }
+
+        /* トグルスイッチのスタイル */
+        .toggle-switch {
+            display: inline-flex;
+            align-items: center;
+            font-size: 16px; /* テキストに合わせてサイズ調整 */
+        }
+
+        .toggle-switch input {
+            display: none; /* チェックボックスを隠す */
+        }
+
+        .slider {
+            position: relative;
+            width: 40px; /* 初期幅 */
+            height: 20px; /* 初期高さ */
+            margin-left: 8px;
+            background-color: #ccc;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.4s;
+        }
+
+        .slider:before {
+            content: "";
+            position: absolute;
+            height: 14px;
+            width: 14px;
+            border-radius: 50%;
+            background-color: white;
+            bottom: 3px;
+            left: 3px;
+            transition: transform 0.4s;
+        }
+
+        input:checked + .slider {
+            background-color: #008DBD;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* モバイル対応（レスポンシブデザイン） */
+        @media (max-width: 768px) {
+            header {
+                font-size: 18px; /* ヘッダーサイズを縮小 */
+                padding: 15px 20px;
+            }
+            video {
+                width: 100%; /* スマホ画面で幅を最大に */
+            }
+            .toggle-switch {
+                font-size: 14px; /* トグルサイズを調整 */
+            }
+            .slider {
+                width: 30px;
+                height: 15px;
+            }
+            .slider:before {
+                height: 12px;
+                width: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" style="text-decoration: none; color: white;">symphony</a>
+    </header>
+
+    <h1>
+        <img src="logo.png" alt="サイトロゴ" style="height: 1em; vertical-align: middle;"> 動画視聴サイト
+    </h1>
+
+    <!-- トグルスイッチ -->
+    <div>
+        <label class="toggle-switch">
+            <span>自動全画面表示</span>
+            <input type="checkbox" id="auto-fullscreen-toggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div id="video-container">
+        <video id="video" controls>
+            <source src="sample.mp4" type="video/mp4">
+            お使いのブラウザは動画タグをサポートしていません。
+        </video>
+    </div>
+
+    <script>
+        // ローカルストレージを使って設定を保存・取得
+        const toggle = document.getElementById('auto-fullscreen-toggle');
+        const video = document.getElementById('video');
+
+        // 初期化: 設定値を読み込む
+        document.addEventListener('DOMContentLoaded', () => {
+            const isAutoFullscreen = localStorage.getItem('autoFullscreen') === 'true';
+            toggle.checked = isAutoFullscreen;
+
+            // 自動全画面を実行
+            if (isAutoFullscreen && video) {
+                enableFullscreen(video);
+            }
+        });
+
+        // トグルの状態変化を保存
+        toggle.addEventListener('change', () => {
+            const isChecked = toggle.checked;
+            localStorage.setItem('autoFullscreen', isChecked);
+        });
+
+        // 全画面表示を有効にする関数
+        function enableFullscreen(element) {
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen();
+            } else if (element.msRequestFullscreen) {
+                element.msRequestFullscreen();
+            }
+        }
+    </script>
+</body>
+</html>
