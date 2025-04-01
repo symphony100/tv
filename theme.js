@@ -1,51 +1,46 @@
 // theme.js
 
-        // トグルスイッチ要素の取得
-        const toggle = document.getElementById('auto-fullscreen-toggle');
-        const video = document.getElementById('video');
+// theme.js
 
-        // ページロード時に設定を読み込み、自動全画面を実行
-        document.addEventListener('DOMContentLoaded', () => {
-            const isAutoFullscreen = localStorage.getItem('autoFullscreen') === 'true';
-            toggle.checked = isAutoFullscreen;
+// 設定データを取得する（ローカルストレージから）
+function getAutoFullscreenSetting() {
+    return localStorage.getItem('autoFullscreen') === 'true';
+}
 
-            // 自動全画面表示を有効化
-            if (isAutoFullscreen && video) {
-                enableFullscreen(video);
-            }
-        });
+// 設定データを保存する（ローカルストレージに）
+function setAutoFullscreenSetting(value) {
+    localStorage.setItem('autoFullscreen', value);
+}
 
-        // トグルスイッチの状態監視し設定を保存
-        toggle.addEventListener('change', () => {
-            const isChecked = toggle.checked;
-            localStorage.setItem('autoFullscreen', isChecked);
+// 全画面表示を有効にする
+function enableFullscreen(element) {
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+    } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+    }
+}
 
-            // 状態に応じた動作を実行
-            if (isChecked) {
-                enableFullscreen(video);
-            } else {
-                disableFullscreen();
-            }
-        });
+// 全画面表示を終了する
+function disableFullscreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+    }
+}
 
-        // 全画面表示を有効にする関数
-        function enableFullscreen(element) {
-            if (element.requestFullscreen) {
-                element.requestFullscreen();
-            } else if (element.webkitRequestFullscreen) {
-                element.webkitRequestFullscreen();
-            } else if (element.msRequestFullscreen) {
-                element.msRequestFullscreen();
-            }
-        }
+// ページが読み込まれたときに自動実行
+document.addEventListener('DOMContentLoaded', () => {
+    const isAutoFullscreen = getAutoFullscreenSetting();
+    const video = document.getElementById('video');
 
-        // 全画面表示を解除する関数
-        function disableFullscreen() {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            }
-        }
+    if (isAutoFullscreen && video) {
+        enableFullscreen(video);
+    }
+});
+
