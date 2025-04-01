@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KBS</title>
     <link rel="stylesheet" href="/tv/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
     <header>
@@ -17,21 +18,32 @@
     
     <!-- 動画コンテナ -->
     <div id="video-container">
+        <video id="video" width="640" height="360" controls>
         <video id="video" controls>
             <source src="http://luong.utako.moe/kbs/index.m3u8" type="video/mp4">
             お使いのブラウザは動画タグをサポートしていません。
         </video>
+        </video>
     </div>
 
     <script src="/tv/tv.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
-        if(Hls.isSupported()){
-            var video = document.getElementById('video_smaple');
+        var video = document.getElementById('video');
+        var videoSrc = 'http://luong.utako.moe/kbs/index.m3u8';  // ここに.m3u8ファイルのURLを設定
+
+        if (Hls.isSupported()) {
             var hls = new Hls();
-            hls.loadSource('http://luong.utako.moe/kbs/index.m3u8');
+            hls.loadSource(videoSrc);
             hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play();
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
+            video.addEventListener('loadedmetadata', function() {
+                video.play();
+            });
         }
-</script>    
+    </script>
 </body>
 </html>
