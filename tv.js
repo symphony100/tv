@@ -1,10 +1,14 @@
 //tv.js
 
-document.getElementById('startButton').addEventListener('click', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const video = document.getElementById('video');
-    video.muted = true; // 音声をミュート
-    video.play(); // 再生
-    enableFullscreen(video); // 全画面表示
+
+    if (video) {
+        // 動画の再生イベントを監視
+        video.addEventListener('play', () => {
+            enableFullscreen(video); // 動画が再生されたら全画面表示
+        });
+    }
 });
 
 function enableFullscreen(element) {
