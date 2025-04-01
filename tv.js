@@ -1,11 +1,10 @@
 //tv.js
 
-//ページをアクセスした場合に、全画面表示にする。
-document.addEventListener('DOMContentLoaded', () => {
+document.getElementById('startButton').addEventListener('click', () => {
     const video = document.getElementById('video');
-    if (video) {
-        enableFullscreen(video);
-    }
+    video.muted = true; // 音声をミュート
+    video.play(); // 再生
+    enableFullscreen(video); // 全画面表示
 });
 
 function enableFullscreen(element) {
