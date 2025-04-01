@@ -24,6 +24,14 @@
     </div>
 
     <script src="/tv/tv.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        if(Hls.isSupported()){
+            var video = document.getElementById('video_smaple');
+            var hls = new Hls();
+            hls.loadSource('http://luong.utako.moe/kbs/index.m3u8');
+            hls.attachMedia(video);
+        }
+</script>    
 </body>
 </html>
