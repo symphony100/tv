@@ -26,17 +26,26 @@
     <script src="/tv/tv.js"></script>
 
         <script>
-        // Automatically trigger fullscreen on page load
-        window.onload = function() {
-            const video = document.getElementById('video');
-            if (video.requestFullscreen) {
-                video.requestFullscreen(); // Standard
-            } else if (video.webkitRequestFullscreen) {
-                video.webkitRequestFullscreen(); // Safari/Chrome
-            } else if (video.msRequestFullscreen) {
-                video.msRequestFullscreen(); // IE/Edge
-            }
-        };
+document.addEventListener('DOMContentLoaded', () => {
+    const video = document.getElementById('video');
+    
+    // 動画の自動再生
+    if (video) {
+        video.play(); // 動画の自動再生
+        enableFullscreen(video); // 動画の自動フルスクリーン表示
+    }
+});
+
+function enableFullscreen(element) {
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+    } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+    }
+}
+
     </script>
 </body>
 </html>
