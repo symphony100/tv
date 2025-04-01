@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <link rel="icon" type="image/x-icon" href="/tv/icon.png">
+    <link rel="icon" type="image/x-icon" href="https://symphony100.github.io/tv/icon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KBS</title>
-    <link rel="stylesheet" href="/tv/style.css">
+    <link rel="stylesheet" href="https://symphony100.github.io/tv/style.css">
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
@@ -19,14 +19,12 @@
     <!-- 動画コンテナ -->
     <div id="video-container">
         <video id="video" width="640" height="360" controls>
-        <video id="video" controls>
-            <source src="http://luong.utako.moe/kbs/index.m3u8" type="video/mp4">
+            <source src="http://luong.utako.moe/kbs/index.m3u8" type="application/x-mpegURL">
             お使いのブラウザは動画タグをサポートしていません。
-        </video>
         </video>
     </div>
 
-    <script src="/tv/tv.js"></script>
+    <script src="https://symphony100.github.io/tv/tv.js"></script>
     <script>
         var video = document.getElementById('video');
         var videoSrc = 'http://luong.utako.moe/kbs/index.m3u8';  // ここに.m3u8ファイルのURLを設定
@@ -47,3 +45,4 @@
     </script>
 </body>
 </html>
+
