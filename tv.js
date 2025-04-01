@@ -1,5 +1,6 @@
 //tv.js
 
+//動画プレイヤー
 document.addEventListener('DOMContentLoaded', () => {
     const video = document.getElementById('video');
 
