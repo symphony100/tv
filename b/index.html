@@ -1,0 +1,13 @@
+<b>KBS2</b></font></a>&nbsp;
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<video id="video_smaple" width="200" height="120" controls></video>
+<script>
+if(Hls.isSupported()) {
+ var video = document.getElementById('video_smaple');
+ var hls = new Hls();
+hls.loadSource('http://luong.utako.moe/kbs/index.m3u8');
+ hls.attachMedia(video);
+}
+</script>
+
+
