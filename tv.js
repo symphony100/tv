@@ -1,5 +1,6 @@
 //tv.js
 
+//ページをアクセスした場合に、全画面表示にする。
 document.addEventListener('DOMContentLoaded', () => {
     const video = document.getElementById('video');
     if (video) {
