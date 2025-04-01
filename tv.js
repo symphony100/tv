@@ -1,30 +1,31 @@
 //tv.js
 
-        // トグルスイッチ要素の取得
+        // トグルスイッチとビデオ要素を取得
         const toggle = document.getElementById('auto-fullscreen-toggle');
         const video = document.getElementById('video');
 
-        // 初期化: 設定値をローカルストレージから取得して適用
+        // ページロード時にローカルストレージの状態を確認し自動実行
         document.addEventListener('DOMContentLoaded', () => {
             const isAutoFullscreen = localStorage.getItem('autoFullscreen') === 'true';
+
+            // トグルスイッチの状態を反映
             toggle.checked = isAutoFullscreen;
 
-            // 有効な場合、自動全画面表示
+            // 状態が有効であれば全画面を自動実行
             if (isAutoFullscreen && video) {
                 enableFullscreen(video);
             }
         });
 
-        // トグルの状態変化を監視し、設定を保存
+        // トグルスイッチの変更を保存し、状態に応じて動作
         toggle.addEventListener('change', () => {
             const isChecked = toggle.checked;
             localStorage.setItem('autoFullscreen', isChecked);
 
-            // 有効なら全画面表示を実行
             if (isChecked) {
-                enableFullscreen(video);
+                enableFullscreen(video); // 全画面表示を有効化
             } else {
-                disableFullscreen();
+                disableFullscreen(); // 全画面表示を解除
             }
         });
 
