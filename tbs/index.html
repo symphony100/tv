@@ -24,5 +24,19 @@
     </div>
 
     <script src="/tv/tv.js"></script>
+
+        <script>
+        // Automatically trigger fullscreen on page load
+        window.onload = function() {
+            const video = document.getElementById('video');
+            if (video.requestFullscreen) {
+                video.requestFullscreen(); // Standard
+            } else if (video.webkitRequestFullscreen) {
+                video.webkitRequestFullscreen(); // Safari/Chrome
+            } else if (video.msRequestFullscreen) {
+                video.msRequestFullscreen(); // IE/Edge
+            }
+        };
+    </script>
 </body>
 </html>
