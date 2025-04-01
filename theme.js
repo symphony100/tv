@@ -1,7 +1,5 @@
 // theme.js
 
-// theme.js
-
 // 設定データを取得する（ローカルストレージから）
 function getAutoFullscreenSetting() {
     return localStorage.getItem('autoFullscreen') === 'true';
