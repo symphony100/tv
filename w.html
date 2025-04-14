@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <link rel="icon" type="image/x-icon" href="/tv/icon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KBS</title>
+    <link rel="stylesheet" href="/tv/style.css">
+</head>
+<body>
+    <header>
+        <a href="/tv/" style="text-decoration: none; color: white;">symphony</a>
+    </header>
+    <h1>
+        <img src="logo.png" alt="サイトロゴ" style="height: 1em; vertical-align: middle;"> KBS
+    </h1>
+    
+    <!-- 動画コンテナ -->
+    <video id="video" width="640" height="360" controls>
+        Your browser does not support the video tag.
+    </video>
+
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        var video = document.getElementById('video');
+        var videoSrc = 'http://luong.utako.moe/kbs/index.m3u8';  // ここに.m3u8ファイルのURLを設定
+
+        if (Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play();
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
+            video.addEventListener('loadedmetadata', function() {
+                video.play();
+            });
+        }
+    </script>
+</body>
+</html>
