@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -5,9 +7,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KBS</title>
-    <link rel="stylesheet" href="/tv/style.css">
 </head>
 <body>
+<style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background-color: #f4f4f4; 
+            margin: 0; 
+        }
+
+        header {
+            background-color: #008DBD;
+            color: white;
+            padding: 20px 30px;
+            text-align: left;
+            font-size: 24px;
+            font-weight: normal;
+        }
+
+
+/* モバイル対応（レスポンシブデザイン） */
+        @media (max-width: 768px) {
+            header {
+                font-size: 18px; /* ヘッダーサイズを縮小 */
+                padding: 15px 20px;
+            }
+            video {
+                width: 100%; /* スマホ画面で幅を最大に */
+            }
+            .toggle-switch {
+                font-size: 14px; /* トグルサイズを調整 */
+            }
+            .slider {
+                width: 30px;
+                height: 15px;
+            }
+            .slider:before {
+                height: 12px;
+                width: 12px;
+            }
+        }
+
+
+        #video-container { margin-top: 50px; } video { width: 80%; max-width: 800px; border: 2px solid #333; }
+
+
+
+
+</style>
     <header>
         <a href="/tv/" style="text-decoration: none; color: white;">symphony</a>
     </header>
@@ -17,6 +65,7 @@
     
     <!-- 動画コンテナ -->
     <video id="video" width="640" height="360" controls>
+        Your browser does not support the video tag.
     </video>
 
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
