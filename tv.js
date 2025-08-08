@@ -1,23 +1,36 @@
 //tv.js
 
-//動画プレイヤー
-document.addEventListener('DOMContentLoaded', () => {
-    const video = document.getElementById('video');
 
-    if (video) {
-        // 動画の再生イベントを監視
-        video.addEventListener('play', () => {
-            enableFullscreen(video); // 動画が再生されたら全画面表示
-        });
-    }
-});
-
-function enableFullscreen(element) {
-    if (element.requestFullscreen) {
+    function enterFullscreen(element) {
+      if (element.requestFullscreen) {
         element.requestFullscreen();
-    } else if (element.webkitRequestFullscreen) {
+      } else if (element.webkitRequestFullscreen) { // Safari
         element.webkitRequestFullscreen();
-    } else if (element.msRequestFullscreen) {
+      } else if (element.msRequestFullscreen) { // IE/Edge
         element.msRequestFullscreen();
+      }
     }
-}
+
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(videoSrc);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        // ユーザーが再生ボタンを押したときに全画面にする
+        video.addEventListener('play', function handlePlayOnce() {
+          enterFullscreen(video);
+          // 一回だけ発動させたいので、イベントリスナーを外す
+          video.removeEventListener('play', handlePlayOnce);
+        });
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = videoSrc;
+      video.addEventListener('loadedmetadata', function () {
+        video.addEventListener('play', function handlePlayOnce() {
+          enterFullscreen(video);
+          video.removeEventListener('play', handlePlayOnce);
+        });
+      });
+    } else {
+      alert("お使いのブラウザはHLSに対応してません");
+    }
