@@ -1,41 +1,31 @@
-        body { 
-            font-family: Arial, sans-serif; 
-            text-align: center; 
-            background-color: #f4f4f4; 
-            margin: 0; 
-        }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f4;
+      margin: 0;
+    }
 
-        header {
-            background-color: #008DBD;
-            color: white;
-            padding: 20px 30px;
-            text-align: left;
-            font-size: 24px;
-            font-weight: normal;
-        }
+    h1 img {
+      height: 1em;
+      vertical-align: middle;
+    }
 
-/* モバイル対応（レスポンシブデザイン） */
-        @media (max-width: 768px) {
-            header {
-                font-size: 18px; /* ヘッダーサイズを縮小 */
-                padding: 15px 20px;
-            }
-            video {
-                width: 100%; /* スマホ画面で幅を最大に */
-            }
-            .toggle-switch {
-                font-size: 14px; /* トグルサイズを調整 */
-            }
-            .slider {
-                width: 30px;
-                height: 15px;
-            }
-            .slider:before {
-                height: 12px;
-                width: 12px;
-            }
-        }
+    #video-container {
+      margin-top: 50px;
+    }
 
+    video {
+      width: 80%;
+      max-width: 800px;
+      border: 2px solid #333;
+    }
 
-        #video-container { margin-top: 50px; } video { width: 80%; max-width: 800px; border: 2px solid #333; }
-
+    @media (max-width: 768px) {
+      header {
+        font-size: 18px;
+        padding: 15px 20px;
+      }
+      video {
+        width: 100%;
+      }
+    }
