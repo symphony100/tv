@@ -1,91 +1,103 @@
-
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <link rel="icon" type="image/x-icon" href="/tv/icon.png">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KBS</title>
+  <link rel="icon" type="image/x-icon" href="/tv/icon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KBS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f4;
+      margin: 0;
+    }
+
+    header {
+      background-color: #008DBD;
+      color: white;
+      padding: 20px 30px;
+      text-align: left;
+      font-size: 24px;
+    }
+
+    h1 img {
+      height: 1em;
+      vertical-align: middle;
+    }
+
+    #video-container {
+      margin-top: 50px;
+    }
+
+    video {
+      width: 80%;
+      max-width: 800px;
+      border: 2px solid #333;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        font-size: 18px;
+        padding: 15px 20px;
+      }
+      video {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
-<style>
-        body { 
-            font-family: Arial, sans-serif; 
-            text-align: center; 
-            background-color: #f4f4f4; 
-            margin: 0; 
-        }
 
-        header {
-            background-color: #008DBD;
-            color: white;
-            padding: 20px 30px;
-            text-align: left;
-            font-size: 24px;
-            font-weight: normal;
-        }
+  <header>
+    <a href="/tv/" style="text-decoration: none; color: white;">symphony</a>
+  </header>
 
+  <h1>
+    <img src="logo.png" alt="サイトロゴ"> KBS</h1>
 
-/* モバイル対応（レスポンシブデザイン） */
-        @media (max-width: 768px) {
-            header {
-                font-size: 18px; /* ヘッダーサイズを縮小 */
-                padding: 15px 20px;
-            }
-            video {
-                width: 100%; /* スマホ画面で幅を最大に */
-            }
-            .toggle-switch {
-                font-size: 14px; /* トグルサイズを調整 */
-            }
-            .slider {
-                width: 30px;
-                height: 15px;
-            }
-            .slider:before {
-                height: 12px;
-                width: 12px;
-            }
-        }
+  <div id="video-container">
+    <video id="video" controls></video>
+  </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    const video = document.getElementById('video');
+    const videoSrc = "https://vn.utako.moe/kbs/index.m3u8";
 
-        #video-container { margin-top: 50px; } video { width: 80%; max-width: 800px; border: 2px solid #333; }
+    function enterFullscreen(element) {
+      if (element.requestFullscreen) {
+        element.requestFullscreen();
+      } else if (element.webkitRequestFullscreen) { // Safari
+        element.webkitRequestFullscreen();
+      } else if (element.msRequestFullscreen) { // IE/Edge
+        element.msRequestFullscreen();
+      }
+    }
 
-
-
-
-</style>
-    <header>
-        <a href="/tv/" style="text-decoration: none; color: white;">symphony</a>
-    </header>
-    <h1>
-        <img src="logo.png" alt="サイトロゴ" style="height: 1em; vertical-align: middle;"> KBS
-    </h1>
-    
-    <!-- 動画コンテナ -->
-    <video id="video" width="640" height="360" controls>
-        Your browser does not support the video tag.
-    </video>
-
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script>
-        var video = document.getElementById('video');
-        var videoSrc = 'http://luong.utako.moe/kbs/index.m3u8';  // ここに.m3u8ファイルのURLを設定
-
-        if (Hls.isSupported()) {
-            var hls = new Hls();
-            hls.loadSource(videoSrc);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                video.play();
-            });
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = videoSrc;
-            video.addEventListener('loadedmetadata', function() {
-                video.play();
-            });
-        }
-    </script>
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(videoSrc);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        // ユーザーが再生ボタンを押したときに全画面にする
+        video.addEventListener('play', function handlePlayOnce() {
+          enterFullscreen(video);
+          // 一回だけ発動させたいので、イベントリスナーを外す
+          video.removeEventListener('play', handlePlayOnce);
+        });
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = videoSrc;
+      video.addEventListener('loadedmetadata', function () {
+        video.addEventListener('play', function handlePlayOnce() {
+          enterFullscreen(video);
+          video.removeEventListener('play', handlePlayOnce);
+        });
+      });
+    } else {
+      alert("お使いのブラウザはHLSに対応してません");
+    }
+  </script>
 </body>
 </html>
