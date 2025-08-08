@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title></title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f4;
+      margin: 0;
+    }
+
+    #video-container {
+      width: 80%;
+      max-width: 800px;
+      margin: 50px auto 0 auto;
+      padding: 0;
+      position: relative;
+      text-align: left;
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: none;
+      outline: none;
+      margin-top: 10px;
+    }
+
+    #controls {
+      margin-bottom: 10px;
+      width: 100%;
+    }
+
+    button {
+      font-size: 30px;
+      padding: 15px 0;
+      width: 100%;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      background-color: #008DBD;
+      color: white;
+      transition: background-color 0.3s ease;
+      display: inline-block;
+      text-align: center;
+      margin: 0;
+    }
+
+    button:hover {
+      background-color: #006a94;
+    }
+  </style>
+</head>
+<body>
+  <h1>KBS</h1>
+  <div id="video-container">
+    <div id="controls">
+      <button id="playBtn">再生</button>
+      <button id="pauseBtn" style="display:none;">一時停止</button>
+    </div>
+    <video id="video" controls></video>
+  </div>
+
+  <!-- HLS.js 読み込み -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    const video = document.getElementById('video');
+    const playBtn = document.getElementById('playBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const videoSrc = 'https://vn.utako.moe/kbs/index.m3u8'; // HLS URL
+
+    // HLS対応してる場合
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(videoSrc);
+      hls.attachMedia(video);
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = videoSrc; // iOS Safariなど
+    } else {
+      alert("お使いのブラウザはHLSに対応してません");
+    }
+
+    // フルスクリーンにする関数
+    function enterFullscreen(element) {
+      if (element.requestFullscreen) {
+        element.requestFullscreen();
+      } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+      } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+      }
+    }
+
+    // 再生ボタン押したとき
+    playBtn.addEventListener('click', () => {
+      video.play();
+      enterFullscreen(video);
+      playBtn.style.display = 'none';
+      pauseBtn.style.display = 'inline-block';
+    });
+
+    // 一時停止ボタン押したとき
+    pauseBtn.addEventListener('click', () => {
+      video.pause();
+      pauseBtn.style.display = 'none';
+      playBtn.style.display = 'inline-block';
+    });
+
+    // 再生終了したら再生ボタン表示
+    video.addEventListener('ended', () => {
+      pauseBtn.style.display = 'none';
+      playBtn.style.display = 'inline-block';
+    });
+
+    // 一時停止したら再生ボタン表示
+    video.addEventListener('pause', () => {
+      if (!video.ended) {
+        pauseBtn.style.display = 'none';
+        playBtn.style.display = 'inline-block';
+      }
+    });
+
+    // 再生中は再生ボタン非表示
+    video.addEventListener('play', () => {
+      playBtn.style.display = 'none';
+      pauseBtn.style.display = 'inline-block';
+    });
+    
+    // スペースキーで再生・一時停止切り替え
+document.addEventListener('keydown', (e) => {
+  if (e.code === 'Space') {
+    e.preventDefault(); // ページスクロール防止
+    if (video.paused) {
+      video.play();
+      enterFullscreen(video);
+      playBtn.style.display = 'none';
+      pauseBtn.style.display = 'inline-block';
+    } else {
+      video.pause();
+      pauseBtn.style.display = 'none';
+      playBtn.style.display = 'inline-block';
+    }
+  }
+});
+    
+  </script>
+</body>
+</html>
