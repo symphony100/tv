@@ -1,29 +1,80 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <link rel="icon" type="image/x-icon" href="https://symphony100.github.io/tv/icon.png">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KBS</title>
-  <link rel="stylesheet" type="text/css" href="https://symphony100.github.io/tv/style.css">
+  <style>
+        body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f4;
+      margin: 0;
+    }
+    
+    #video-container {
+      width: 80%;
+      max-width: 800px;
+      margin: 50px auto 0 auto;
+      padding: 0;
+      position: relative;
+      text-align: left; /* 左寄せ */
+    }
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: none;
+      outline: none;
+      margin-top: 10px;
+    }
+    #controls {
+      margin-bottom: 10px;
+      width: 100%;
+    }
+    button {
+      font-size: 30px;
+      padding: 15px 0;
+      width: 100%; /* 横いっぱいに */
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      background-color: #008DBD;
+      color: white;
+      transition: background-color 0.3s ease;
+      display: inline-block;
+      text-align: center;
+      margin: 0; /* マージンなし */
+    }
+    button:hover {
+      background-color: #006a94;
+    }
+  </style>
 </head>
 <body>
-  <!-- ここで、チャンネル名変更 -->
   <h1>KBS</h1>
   <div id="video-container">
+    <div id="controls">
+      <button id="playBtn">再生</button>
+      <button id="pauseBtn" style="display:none;">一時停止</button>
+    </div>
     <video id="video" controls></video>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script>
     const video = document.getElementById('video');
-    const videoSrc = "https://vn.utako.moe/kbs/index.m3u8"; //ここでURL変更
+    const playBtn = document.getElementById('playBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const videoSrc = 'https://vn.utako.moe/kbs/index.m3u8'; //URL
 
     function enterFullscreen(element) {
       if (element.requestFullscreen) {
         element.requestFullscreen();
-      } else if (element.webkitRequestFullscreen) { // Safari
+      } else if (element.webkitRequestFullscreen) {
         element.webkitRequestFullscreen();
-      } else if (element.msRequestFullscreen) { // IE/Edge
+      } else if (element.msRequestFullscreen) {
         element.msRequestFullscreen();
       }
     }
@@ -32,25 +83,42 @@
       const hls = new Hls();
       hls.loadSource(videoSrc);
       hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, function () {
-        // ユーザーが再生ボタンを押したときに全画面にする
-        video.addEventListener('play', function handlePlayOnce() {
-          enterFullscreen(video);
-          // 一回だけ発動させたいので、イベントリスナーを外す
-          video.removeEventListener('play', handlePlayOnce);
-        });
-      });
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = videoSrc;
-      video.addEventListener('loadedmetadata', function () {
-        video.addEventListener('play', function handlePlayOnce() {
-          enterFullscreen(video);
-          video.removeEventListener('play', handlePlayOnce);
-        });
-      });
     } else {
       alert("お使いのブラウザはHLSに対応してません");
     }
+
+    playBtn.addEventListener('click', () => {
+      video.play();
+      enterFullscreen(video);
+      playBtn.style.display = 'none';
+      pauseBtn.style.display = 'inline-block';
+    });
+
+    pauseBtn.addEventListener('click', () => {
+      video.pause();
+      pauseBtn.style.display = 'none';
+      playBtn.style.display = 'inline-block';
+    });
+
+    video.addEventListener('ended', () => {
+      pauseBtn.style.display = 'none';
+      playBtn.style.display = 'inline-block';
+    });
+
+    video.addEventListener('pause', () => {
+      if (!video.ended) {
+        pauseBtn.style.display = 'none';
+        playBtn.style.display = 'inline-block';
+      }
+    });
+
+    video.addEventListener('play', () => {
+      playBtn.style.display = 'none';
+      pauseBtn.style.display = 'inline-block';
+    });
   </script>
 </body>
 </html>
+
