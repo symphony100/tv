@@ -8,52 +8,16 @@
   <link rel="stylesheet" type="text/css" href="/tv/style.css">
 </head>
 <body>
-
-  <h1>
-    <img src="logo.png" alt="サイトロゴ"> </h1>
-
+  <h1><img src="logo.png" alt="サイトロゴ"></h1>
   <div id="video-container">
     <video id="video" controls></video>
   </div>
-
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script>
     const video = document.getElementById('video');
     const videoSrc = "https://vn.utako.moe/kbs/index.m3u8"; //ここでURL変更
-
-    function enterFullscreen(element) {
-      if (element.requestFullscreen) {
-        element.requestFullscreen();
-      } else if (element.webkitRequestFullscreen) { // Safari
-        element.webkitRequestFullscreen();
-      } else if (element.msRequestFullscreen) { // IE/Edge
-        element.msRequestFullscreen();
-      }
-    }
-
-    if (Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(videoSrc);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, function () {
-        // ユーザーが再生ボタンを押したときに全画面にする
-        video.addEventListener('play', function handlePlayOnce() {
-          enterFullscreen(video);
-          // 一回だけ発動させたいので、イベントリスナーを外す
-          video.removeEventListener('play', handlePlayOnce);
-        });
-      });
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = videoSrc;
-      video.addEventListener('loadedmetadata', function () {
-        video.addEventListener('play', function handlePlayOnce() {
-          enterFullscreen(video);
-          video.removeEventListener('play', handlePlayOnce);
-        });
-      });
-    } else {
-      alert("お使いのブラウザはHLSに対応してません");
-    }
   </script>
+  <!-- tv.js埋め込み -->
+  <script type="text/javascript" src="/tv/tv.js"></script>
 </body>
 </html>
